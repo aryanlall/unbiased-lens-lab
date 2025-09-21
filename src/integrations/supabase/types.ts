@@ -14,7 +14,288 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analysis_requests: {
+        Row: {
+          article_id: string | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          input_content: string
+          input_type: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          article_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          input_content: string
+          input_type: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          article_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          input_content?: string
+          input_type?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analysis_requests_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_votes: {
+        Row: {
+          article_id: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          vote_type: string
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          vote_type: string
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          vote_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_votes_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      articles: {
+        Row: {
+          ai_explanation: string | null
+          analyzed_at: string | null
+          bias_label: string | null
+          bias_score: number | null
+          content: string | null
+          created_at: string
+          credibility_score: number | null
+          fact_check_explanation: string | null
+          fact_check_score: number | null
+          headline: string
+          id: string
+          published_at: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          source_name: string | null
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          ai_explanation?: string | null
+          analyzed_at?: string | null
+          bias_label?: string | null
+          bias_score?: number | null
+          content?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          fact_check_explanation?: string | null
+          fact_check_score?: number | null
+          headline: string
+          id?: string
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          ai_explanation?: string | null
+          analyzed_at?: string | null
+          bias_label?: string | null
+          bias_score?: number | null
+          content?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          fact_check_explanation?: string | null
+          fact_check_score?: number | null
+          headline?: string
+          id?: string
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      badges: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          requirement_type: string | null
+          requirement_value: number | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          requirement_type?: string | null
+          requirement_value?: number | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          requirement_type?: string | null
+          requirement_value?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          daily_streak: number | null
+          display_name: string | null
+          id: string
+          last_login_date: string | null
+          reputation_score: number | null
+          total_badges: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_streak?: number | null
+          display_name?: string | null
+          id?: string
+          last_login_date?: string | null
+          reputation_score?: number | null
+          total_badges?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          daily_streak?: number | null
+          display_name?: string | null
+          id?: string
+          last_login_date?: string | null
+          reputation_score?: number | null
+          total_badges?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      similar_articles: {
+        Row: {
+          comparison_type: string | null
+          created_at: string
+          id: string
+          original_article_id: string
+          similar_article_id: string
+          similarity_score: number | null
+        }
+        Insert: {
+          comparison_type?: string | null
+          created_at?: string
+          id?: string
+          original_article_id: string
+          similar_article_id: string
+          similarity_score?: number | null
+        }
+        Update: {
+          comparison_type?: string | null
+          created_at?: string
+          id?: string
+          original_article_id?: string
+          similar_article_id?: string
+          similarity_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "similar_articles_original_article_id_fkey"
+            columns: ["original_article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "similar_articles_similar_article_id_fkey"
+            columns: ["similar_article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

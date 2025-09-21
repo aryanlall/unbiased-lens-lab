@@ -2,6 +2,203 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Professional News Theme - Trust & Credibility Colors */
+    --background: 218 20% 97%;
+    --foreground: 220 15% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
+    
+    /* Primary Brand - Professional Blue */
+    --primary: 214 84% 48%;
+    --primary-foreground: 0 0% 98%;
+    --primary-subtle: 214 84% 95%;
+    --primary-glow: 214 84% 65%;
+    
+    /* Secondary - Trust Gray */
+    --secondary: 220 10% 95%;
+    --secondary-foreground: 220 15% 25%;
+    
+    /* Accent - Information Blue */
+    --accent: 210 100% 92%;
+    --accent-foreground: 214 84% 45%;
+    
+    /* Muted Elements */
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 10% 45%;
+    
+    /* Border & Input */
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 214 84% 48%;
+    
+    /* Bias Colors */
+    --bias-left: 0 72% 51%;
+    --bias-center-left: 14 100% 57%;
+    --bias-center: 47 100% 50%;
+    --bias-center-right: 32 95% 44%;
+    --bias-right: 220 84% 48%;
+    
+    /* Sentiment Colors */
+    --sentiment-positive: 142 69% 58%;
+    --sentiment-neutral: 47 100% 65%;
+    --sentiment-negative: 0 72% 51%;
+    
+    /* Credibility Colors */
+    --credibility-high: 142 69% 58%;
+    --credibility-medium: 47 100% 65%;
+    --credibility-low: 0 72% 51%;
+    
+    /* Status Colors */
+    --success: 142 69% 58%;
+    --warning: 47 100% 65%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(214 84% 48%), hsl(214 84% 65%));
+    --gradient-bias: linear-gradient(90deg, hsl(0 72% 51%), hsl(47 100% 50%), hsl(220 84% 48%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 15% 98%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 15% 98%) 100%);
+    
+    /* Shadows with primary color */
+    --shadow-primary: 0 4px 20px -2px hsl(214 84% 48% / 0.15);
+    --shadow-card: 0 2px 8px -1px hsl(220 15% 25% / 0.08);
+    --shadow-bias: 0 4px 16px -4px hsl(214 84% 48% / 0.25);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    --background: 224 30% 7%;
+    --foreground: 213 20% 85%;
+    --card: 224 25% 10%;
+    --card-foreground: 213 20% 85%;
+    --popover: 224 25% 10%;
+    --popover-foreground: 213 20% 85%;
+    
+    --primary: 214 84% 55%;
+    --primary-foreground: 224 30% 7%;
+    --primary-subtle: 214 84% 15%;
+    --primary-glow: 214 84% 45%;
+    
+    --secondary: 224 20% 15%;
+    --secondary-foreground: 213 20% 75%;
+    
+    --accent: 224 20% 15%;
+    --accent-foreground: 214 84% 55%;
+    
+    --muted: 224 20% 15%;
+    --muted-foreground: 213 15% 55%;
+    
+    --border: 224 20% 20%;
+    --input: 224 20% 20%;
+    --ring: 214 84% 55%;
+    
+    --gradient-subtle: linear-gradient(180deg, hsl(224 25% 10%), hsl(224 30% 7%));
+    --gradient-card: linear-gradient(145deg, hsl(224 25% 10%) 0%, hsl(224 20% 12%) 100%);
+    
+    --shadow-primary: 0 4px 20px -2px hsl(214 84% 25% / 0.3);
+    --shadow-card: 0 2px 8px -1px hsl(0 0% 0% / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-bias {
+    background: var(--gradient-bias);
+  }
+  
+  .gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-bias {
+    box-shadow: var(--shadow-bias);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
