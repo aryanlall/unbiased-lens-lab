@@ -5,21 +5,13 @@ import { Progress } from "@/components/ui/progress";
 import { Smile, Meh, Frown, Heart, TrendingUp } from "lucide-react";
 
 interface SentimentAnalysisProps {
-  sentimentScore: number; // -1.0 to 1.0
-  sentimentLabel: string;
-  confidenceScore?: number; // 0.0 to 1.0
-  emotionalTone?: string[];
-  explanation?: string;
+  score: number;
+  label: string;
 }
 
-export function SentimentAnalysis({ 
-  sentimentScore, 
-  sentimentLabel, 
-  confidenceScore,
-  emotionalTone = [],
-  explanation 
-}: SentimentAnalysisProps) {
-  // Convert sentiment score to 0-100 scale for display
+export function SentimentAnalysis({ score, label }: SentimentAnalysisProps) {
+  // Convert sentiment score to -1 to 1 range then to 0-100 for display
+  const sentimentScore = score; // Already in -1 to 1 range
   const displayScore = Math.round((sentimentScore + 1) * 50);
   
   // Get sentiment color and icon
@@ -45,7 +37,7 @@ export function SentimentAnalysis({
     };
   };
 
-  const sentimentData = getSentimentData(sentimentScore, sentimentLabel);
+  const sentimentData = getSentimentData(sentimentScore, label);
 
   // Get intensity level
   const getIntensity = (score: number) => {
@@ -77,7 +69,7 @@ export function SentimentAnalysis({
                 variant="secondary" 
                 className={`bg-${sentimentData.color}/10 text-${sentimentData.color} border-${sentimentData.color}/20`}
               >
-                {sentimentLabel.charAt(0).toUpperCase() + sentimentLabel.slice(1)}
+                {label.charAt(0).toUpperCase() + label.slice(1)}
               </Badge>
               <Badge variant="outline" className="text-xs">
                 {getIntensity(sentimentScore)}
@@ -104,35 +96,7 @@ export function SentimentAnalysis({
           </p>
         </div>
 
-        {/* Confidence Score */}
-        {confidenceScore !== undefined && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Confidence Level</span>
-              <span className="text-sm text-muted-foreground">
-                {Math.round(confidenceScore * 100)}%
-              </span>
-            </div>
-            <Progress value={confidenceScore * 100} className="h-2" />
-          </div>
-        )}
-
-        {/* Emotional Tone Tags */}
-        {emotionalTone.length > 0 && (
-          <div className="space-y-2">
-            <span className="text-sm font-medium flex items-center gap-2">
-              <Heart className="w-4 h-4" />
-              Emotional Tones Detected
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {emotionalTone.map((tone, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {tone}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Remove unused sections for now */}
 
         {/* Sentiment Score Details */}
         <div className="bg-muted/50 rounded-lg p-3">
@@ -150,15 +114,7 @@ export function SentimentAnalysis({
           </div>
         </div>
 
-        {/* Explanation */}
-        {explanation && (
-          <div className="bg-muted/30 rounded-lg p-3">
-            <p className="text-sm font-medium mb-1">Why this sentiment?</p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {explanation}
-            </p>
-          </div>
-        )}
+        {/* Remove explanation section for now */}
       </CardContent>
     </Card>
   );

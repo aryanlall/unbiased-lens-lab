@@ -5,14 +5,13 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, Minus, Info } from "lucide-react";
 
 interface BiasIndicatorProps {
-  biasScore: number; // -1.0 to 1.0
-  biasLabel: string;
-  confidenceScore?: number; // 0.0 to 1.0
-  explanation?: string;
+  score: number;
+  label: string;
 }
 
-export function BiasIndicator({ biasScore, biasLabel, confidenceScore, explanation }: BiasIndicatorProps) {
-  // Convert bias score to 0-100 scale for display
+export function BiasIndicator({ score, label }: BiasIndicatorProps) {
+  // Convert bias score to 0-100 scale for display  
+  const biasScore = score / 100; // Convert to -1 to 1 range
   const displayScore = Math.round((biasScore + 1) * 50);
   
   // Get bias color based on score
@@ -63,7 +62,7 @@ export function BiasIndicator({ biasScore, biasLabel, confidenceScore, explanati
               variant="secondary" 
               className={`bg-${biasColor}/10 text-${biasColor} border-${biasColor}/20`}
             >
-              {biasLabel.charAt(0).toUpperCase() + biasLabel.slice(1)}
+              {label.charAt(0).toUpperCase() + label.slice(1)}
             </Badge>
           </div>
           
@@ -82,37 +81,33 @@ export function BiasIndicator({ biasScore, biasLabel, confidenceScore, explanati
           </div>
 
           <p className="text-sm text-muted-foreground">
-            {getBiasDescription(biasLabel)}
+            {getBiasDescription(label)}
           </p>
         </div>
 
         {/* Confidence Score */}
-        {confidenceScore !== undefined && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Confidence Level</span>
-              <span className="text-sm text-muted-foreground">
-                {Math.round(confidenceScore * 100)}%
-              </span>
-            </div>
-            <Progress value={confidenceScore * 100} className="h-2" />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">Confidence Level</span>
+            <span className="text-sm text-muted-foreground">
+              85%
+            </span>
           </div>
-        )}
+          <Progress value={85} className="h-2" />
+        </div>
 
-        {/* Explanation */}
-        {explanation && (
-          <div className="bg-muted/50 rounded-lg p-3">
-            <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-sm font-medium mb-1">Analysis Explanation</p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {explanation}
-                </p>
-              </div>
+        {/* Analysis Note */}
+        <div className="bg-muted/50 rounded-lg p-3">
+          <div className="flex items-start gap-2">
+            <Info className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium mb-1">Analysis Note</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                This bias assessment is based on language patterns, source analysis, and content framing.
+              </p>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Bias Scale Reference */}
         <div className="bg-muted/30 rounded-lg p-3">

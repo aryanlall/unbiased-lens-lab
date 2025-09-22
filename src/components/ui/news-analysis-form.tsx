@@ -10,11 +10,10 @@ import { Loader2, Link, FileText, Type, Upload, Search } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 interface NewsAnalysisFormProps {
-  onAnalysisStart: (data: any) => void;
-  isAnalyzing: boolean;
+  onSubmit: (data: { headline: string; content?: string; url?: string }) => void;
 }
 
-export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisFormProps) {
+export function NewsAnalysisForm({ onSubmit }: NewsAnalysisFormProps) {
   const [inputType, setInputType] = useState<'text' | 'url' | 'file'>('text');
   const [formData, setFormData] = useState({
     headline: '',
@@ -57,8 +56,6 @@ export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisF
   };
 
   const handleSubmit = async () => {
-    let inputContent = '';
-    
     switch (inputType) {
       case 'text':
         if (!formData.headline.trim()) {
@@ -69,7 +66,10 @@ export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisF
           });
           return;
         }
-        inputContent = formData.headline.trim();
+        onSubmit({ 
+          headline: formData.headline.trim(),
+          content: formData.headline.trim()
+        });
         break;
         
       case 'url':
@@ -81,10 +81,12 @@ export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisF
           });
           return;
         }
-        // Basic URL validation
         try {
           new URL(formData.url);
-          inputContent = formData.url.trim();
+          onSubmit({ 
+            headline: "Article from URL",
+            url: formData.url.trim()
+          });
         } catch {
           toast({
             title: "Invalid URL",
@@ -104,17 +106,12 @@ export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisF
           });
           return;
         }
-        inputContent = formData.file.name;
+        toast({
+          title: "File Upload",
+          description: "File upload analysis coming soon!",
+        });
         break;
     }
-
-    // Start analysis
-    onAnalysisStart({
-      inputType,
-      inputContent,
-      file: formData.file,
-      userId: user?.id,
-    });
   };
 
   return (
@@ -210,10 +207,10 @@ export function NewsAnalysisForm({ onAnalysisStart, isAnalyzing }: NewsAnalysisF
         <div className="mt-6 pt-4 border-t">
           <Button 
             onClick={handleSubmit} 
-            disabled={isAnalyzing}
+            disabled={false}
             className="w-full h-12 text-base gradient-primary shadow-primary transition-smooth"
           >
-            {isAnalyzing ? (
+            {false ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                 Analyzing Article...
