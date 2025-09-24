@@ -16,6 +16,7 @@ serve(async (req) => {
     const { content, headline, url } = await req.json();
     
     const groqApiKey = Deno.env.get('GROQ_API_KEY');
+    console.log('GROQ_API_KEY exists:', !!groqApiKey);
     if (!groqApiKey) {
       throw new Error('GROQ_API_KEY is not set');
     }
