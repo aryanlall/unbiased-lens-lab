@@ -8,7 +8,7 @@ import { SentimentAnalysis } from "@/components/ui/sentiment-analysis";
 import { FactCheckDisplay } from "@/components/ui/fact-check-display";
 import { AIExplanation } from "@/components/ui/ai-explanation";
 import { Card } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -172,10 +172,18 @@ const Index = () => {
             </>
           ) : (
             <div className="text-center">
-              <AuthDialog />
-              <p className="mt-4 text-muted-foreground">
-                Sign in to start analyzing news articles for bias and accuracy
-              </p>
+              <div className="max-w-md mx-auto">
+                <div className="mb-6">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                    <LogIn className="w-8 h-8 text-primary" />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">Get Started</h2>
+                  <p className="text-muted-foreground">
+                    Sign in to start analyzing news articles for bias and accuracy
+                  </p>
+                </div>
+                <AuthDialog />
+              </div>
             </div>
           )}
         </div>
