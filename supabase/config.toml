@@ -38,3 +38,9 @@ verify_jwt = false
 
 [functions.get-related-articles]
 verify_jwt = false
+
+[functions.vote-article]
+verify_jwt = false
+
+[functions.get-user-badges]
+verify_jwt = false
