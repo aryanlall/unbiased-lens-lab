@@ -7,6 +7,7 @@ import { BiasIndicator } from "@/components/ui/bias-indicator";
 import { SentimentAnalysis } from "@/components/ui/sentiment-analysis";
 import { FactCheckDisplay } from "@/components/ui/fact-check-display";
 import { AIExplanation } from "@/components/ui/ai-explanation";
+import { RelatedNewsFeed } from "@/components/RelatedNewsFeed";
 import { Card } from "@/components/ui/card";
 import { Loader2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,6 +167,10 @@ const Index = () => {
                     limitations={[analysisResult.limitations || "Analysis may vary based on context"]}
                     confidence={analysisResult.confidence}
                     processingTime={2.5}
+                  />
+                  
+                  <RelatedNewsFeed 
+                    biasLabel={analysisResult.bias_label}
                   />
                 </div>
               )}
