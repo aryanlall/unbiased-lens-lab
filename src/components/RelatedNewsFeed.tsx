@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, TrendingUp, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Loader2, TrendingUp, ExternalLink, ThumbsUp, ThumbsDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 
 interface Article {
   id: string;
@@ -14,6 +16,9 @@ interface Article {
   sentiment_label?: string;
   analyzed_at: string;
   url?: string;
+  upvotes?: number;
+  downvotes?: number;
+  user_vote?: 'upvote' | 'downvote' | null;
 }
 
 interface RelatedNewsFeedProps {
@@ -24,6 +29,8 @@ interface RelatedNewsFeedProps {
 export const RelatedNewsFeed = ({ currentArticleId, biasLabel }: RelatedNewsFeedProps) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [votingStates, setVotingStates] = useState<{ [key: string]: boolean }>({});
+  const { user } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -66,6 +73,56 @@ export const RelatedNewsFeed = ({ currentArticleId, biasLabel }: RelatedNewsFeed
       case 'center-right': return 'bg-red-300';
       case 'right': return 'bg-red-500';
       default: return 'bg-gray-400';
+    }
+  };
+
+  const handleVote = async (articleId: string, voteType: 'upvote' | 'downvote') => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to vote on articles.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setVotingStates(prev => ({ ...prev, [articleId]: true }));
+    try {
+      const { data, error } = await supabase.functions.invoke('vote-article', {
+        body: { articleId, voteType }
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        // Update article in state
+        setArticles(prev => prev.map(article => 
+          article.id === articleId 
+            ? { 
+                ...article, 
+                upvotes: data.upvotes, 
+                downvotes: data.downvotes,
+                user_vote: data.userVote 
+              }
+            : article
+        ));
+
+        if (data.operation === 'new') {
+          toast({
+            title: "Vote recorded",
+            description: `You ${voteType}d this article!`,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error voting:', error);
+      toast({
+        title: "Vote failed",
+        description: "Failed to record your vote. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setVotingStates(prev => ({ ...prev, [articleId]: false }));
     }
   };
 
@@ -112,7 +169,7 @@ export const RelatedNewsFeed = ({ currentArticleId, biasLabel }: RelatedNewsFeed
       <div className="space-y-4">
         {articles.map((article) => (
           <Card key={article.id} className="p-4 hover:shadow-md transition-shadow">
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <h4 className="font-semibold text-sm line-clamp-2 flex-1">
                   {article.headline}
@@ -149,10 +206,43 @@ export const RelatedNewsFeed = ({ currentArticleId, biasLabel }: RelatedNewsFeed
                   </Badge>
                 )}
               </div>
+
+              {/* Voting Section */}
+              <div className="flex items-center gap-2 pt-2 border-t">
+                <Button
+                  variant={article.user_vote === 'upvote' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => handleVote(article.id, 'upvote')}
+                  disabled={votingStates[article.id] || !user}
+                  className="h-7 px-2"
+                >
+                  <ThumbsUp className="w-3 h-3 mr-1" />
+                  {article.upvotes || 0}
+                </Button>
+                
+                <Button
+                  variant={article.user_vote === 'downvote' ? 'destructive' : 'ghost'}
+                  size="sm"
+                  onClick={() => handleVote(article.id, 'downvote')}
+                  disabled={votingStates[article.id] || !user}
+                  className="h-7 px-2"
+                >
+                  <ThumbsDown className="w-3 h-3 mr-1" />
+                  {article.downvotes || 0}
+                </Button>
+              </div>
             </div>
           </Card>
         ))}
       </div>
+      
+      {!user && (
+        <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+          <p className="text-sm text-muted-foreground text-center">
+            <strong>Sign in</strong> to vote on articles and earn badges!
+          </p>
+        </div>
+      )}
     </Card>
   );
 };

@@ -8,6 +8,7 @@ import { SentimentAnalysis } from "@/components/ui/sentiment-analysis";
 import { FactCheckDisplay } from "@/components/ui/fact-check-display";
 import { AIExplanation } from "@/components/ui/ai-explanation";
 import { RelatedNewsFeed } from "@/components/RelatedNewsFeed";
+import { UserBadges } from "@/components/UserBadges";
 import { Card } from "@/components/ui/card";
 import { Loader2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -120,6 +121,8 @@ const Index = () => {
               <div className="flex justify-between items-center">
                 <UserProfile user={user} onSignOut={signOut} />
               </div>
+              
+              <UserBadges />
               
               <NewsAnalysisForm onSubmit={handleAnalysis} />
               
